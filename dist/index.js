@@ -14538,8 +14538,8 @@ function pad(n) {
 function normalizeName(problemName) {
   return problemName
     .toLowerCase()
-    .replace(/\s/g, "-")
-    .replace(/[^a-zA-Z0-9_-]/gi, "");
+    .replace(/\s/g, "_")
+    .replace(/[^a-zA-Z0-9_]/gi, "");
 }
 
 function graphqlHeaders(session, csrfToken) {
@@ -14650,12 +14650,12 @@ async function commit(params) {
 
   if ("runtimePerc" in submission) {
     message = `${commitName} - ${submission.title} - Runtime - ${submission.runtime} (${submission.runtimePerc}), Memory - ${submission.memory} (${submission.memoryPerc})`;
-    qid = `${submission.qid}-`;
+    qid = `${submission.qid}_`;
   } else {
     message = `${commitName} - ${submission.title} - Runtime - ${submission.runtime}, Memory - ${submission.memory}`;
     qid = "";
   }
-  const folderName = `${qid}${name}`;
+  const folderName = `p${qid}${name}`;
   // Markdown file for the problem with question data
   const questionPath = path.join(prefix, folderName, "README.md");
 
@@ -14672,7 +14672,7 @@ async function commit(params) {
     {
       path: path.normalize(solutionPath),
       mode: "100644",
-      content: `${submission.code}\n`, // Adds newline at EOF to conform to git recommendations
+      content: `package ${folderName}\n\n${submission.code}\n`, // Adds newline at EOF to conform to git recommendations
     },
   ];
 
