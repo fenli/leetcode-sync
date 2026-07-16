@@ -17,6 +17,10 @@ inputs:
     description: 'Number of seconds after an accepted solution to ignore other accepted solutions for the same problem'
     required: false
     default: '86400'
+  filter-solution-language:
+    description: 'Sync only solution in this programming language. Default is sync all.'
+    required: true
+    default: '*'
   destination-folder:
     description: 'The folder to save the synced files in (relative to the top level of your repo)'
     required: false
