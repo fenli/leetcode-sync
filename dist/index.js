@@ -19563,7 +19563,7 @@ const TEST_MODE = process.argv.includes("test");
 
 async function main() {
   let githubToken, owner, repo, leetcodeCSRFToken, leetcodeSession;
-  let filterDuplicateSecs, filterLanguage, destinationFolder;
+  let filterDuplicateSecs, filterSolutionLanguage, destinationFolder;
   if (TEST_MODE) {
     if (
       !config.GITHUB_TOKEN ||
