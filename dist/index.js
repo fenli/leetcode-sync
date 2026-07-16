@@ -14790,6 +14790,7 @@ async function sync(inputs) {
     leetcodeCSRFToken,
     leetcodeSession,
     filterDuplicateSecs,
+	filterSolutionLanguage,
     destinationFolder,
     verbose,
     commitHeader,
@@ -14928,6 +14929,11 @@ async function sync(inputs) {
       continue;
     }
 
+	if (filterSolutionLanguage !== "*" && filterSolutionLanguage !== submission.lang) {
+      // Skip this submission if it's not the filtered language
+      continue;
+    }
+
     // Get the question data for the submission.
     const questionData = await getQuestionData(
       submission.titleSlug,
@@ -14975,6 +14981,7 @@ module.exports = {
 
   // These parameters are optional and have default values if needed.
   FILTER_DUPLICATE_SECS: process.env.FILTER_DUPLICATE_SECS ?? 86400,
+  FILTER_SOLUTION_LANGUAGE: process.env.FILTER_SOLUTION_LANGUAGE ?? "*",
   DESTINATION_FOLDER: process.env.DESTINATION_FOLDER ?? "",
   VERBOSE: process.env.VERBOSE ?? true,
   COMMIT_HEADER: process.env.COMMIT_HEADER ?? "Sync LeetCode submission",
@@ -19556,7 +19563,7 @@ const TEST_MODE = process.argv.includes("test");
 
 async function main() {
   let githubToken, owner, repo, leetcodeCSRFToken, leetcodeSession;
-  let filterDuplicateSecs, destinationFolder;
+  let filterDuplicateSecs, filterLanguage, destinationFolder;
   if (TEST_MODE) {
     if (
       !config.GITHUB_TOKEN ||
@@ -19573,6 +19580,7 @@ async function main() {
     leetcodeCSRFToken = config.LEETCODE_CSRF_TOKEN;
     leetcodeSession = config.LEETCODE_SESSION;
     filterDuplicateSecs = config.FILTER_DUPLICATE_SECS;
+	filterSolutionLanguage = config.FILTER_SOLUTION_LANGUAGE;
     destinationFolder = config.DESTINATION_FOLDER;
     verbose = config.VERBOSE.toString(); // Convert to string to match core.getInput('verbose') return type
     commitHeader = config.COMMIT_HEADER;
@@ -19583,6 +19591,7 @@ async function main() {
     leetcodeCSRFToken = core.getInput("leetcode-csrf-token");
     leetcodeSession = core.getInput("leetcode-session");
     filterDuplicateSecs = core.getInput("filter-duplicate-secs");
+	filterSolutionLanguage = core.getInput("filter-solution-language");
     destinationFolder = core.getInput("destination-folder");
     verbose = core.getInput("verbose");
     commitHeader = core.getInput("commit-header");
@@ -19595,6 +19604,7 @@ async function main() {
     leetcodeCSRFToken,
     leetcodeSession,
     filterDuplicateSecs,
+	filterSolutionLanguage,
     destinationFolder,
     verbose,
     commitHeader,
